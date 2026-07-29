@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/song_model.dart';
 import '../widgets/song_card.dart';
 
-enum SortOption { defaultOrder, titleAZ, titleZA, artistAZ }
+enum SortOption { defaultOrder, titleAZ, titleZA, artistAZ,  artistZA}
 
 class FeedPage extends StatefulWidget {
   const FeedPage({super.key});
@@ -25,6 +25,9 @@ class _FeedPageState extends State<FeedPage> {
         break;
       case SortOption.artistAZ:
         songs.sort((a, b) => a.artist.compareTo(b.artist));
+        break;
+      case SortOption.artistZA:
+        songs.sort((a, b) => b.artist.compareTo(a.artist));
         break;
       case SortOption.defaultOrder:
         break;
@@ -51,6 +54,7 @@ class _FeedPageState extends State<FeedPage> {
               PopupMenuItem(value: SortOption.titleAZ, child: Text('Title A-Z')),
               PopupMenuItem(value: SortOption.titleZA, child: Text('Title Z-A')),
               PopupMenuItem(value: SortOption.artistAZ, child: Text('Artist A-Z')),
+              PopupMenuItem(value: SortOption.artistZA, child: Text('Artist Z-A')),
             ],
           ),
         ],
