@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_12rpl/providers/favorite_provider.dart';
+import 'package:provider/provider.dart';
 import '../models/song_model.dart';
 import '../pages/detail_page.dart';
 import 'animated_like_button.dart';
@@ -6,10 +8,15 @@ import 'animated_like_button.dart';
 class SongCard extends StatelessWidget {
   final Song song;
 
-  const SongCard({super.key, required this.song});
+  const SongCard({
+    super.key,
+    required this.song,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final favProvider = context.watch<FavoriteProvider>();
+    final isFavorite = favProvider.isFavorite(song.id);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
@@ -28,19 +35,10 @@ class SongCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         child: Column(
           children: [
-            GestureDetector(
-              onTap: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DetailPage(song: song),
-                  ),
-                );
-              },
-              child: Stack(
-                children: [ 
+            Stack(
+                children: [
                   Hero(
-                    tag: 'cover_${song.id}',
+                    tag: 'cover_${song.title}',
                     child: Image.network(
                       song.coverUrl,
                       height: 200,
@@ -48,7 +46,6 @@ class SongCard extends StatelessWidget {
                       fit: BoxFit.cover,
                     ),
                   ),
-
                   Positioned.fill(
                     child: Container(
                       decoration: BoxDecoration(
@@ -89,7 +86,6 @@ class SongCard extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
             Padding(
               padding: const EdgeInsets.all(14.0),
               child: Row(
@@ -112,7 +108,12 @@ class SongCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const AnimatedLikeButton(),
+                  AnimatedLikeButton(
+                    isLiked: isFavorite,
+                    onTap: () {
+                      context.read<FavoriteProvider>().toggleFavorite(song.id);
+                    },
+                  ),
                 ],
               ),
             ),

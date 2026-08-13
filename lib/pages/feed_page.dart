@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_12rpl/pages/detail_page.dart';
 import '../models/song_model.dart';
 import '../widgets/song_card.dart';
 
-enum SortOption { defaultOrder, titleAZ, titleZA, artistAZ,  artistZA}
+enum SortOption { defaultOrder, titleAZ, titleZA, artistAZ, artistZA }
 
 class FeedPage extends StatefulWidget {
   const FeedPage({super.key});
@@ -43,18 +44,35 @@ class _FeedPageState extends State<FeedPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text('Discover Vibes',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
+        title: const Text(
+          'Discover Vibes',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+        ),
         actions: [
           PopupMenuButton<SortOption>(
             icon: const Icon(Icons.sort_rounded),
             onSelected: (value) => setState(() => _sortOption = value),
             itemBuilder: (context) => const [
-              PopupMenuItem(value: SortOption.defaultOrder, child: Text('Default')),
-              PopupMenuItem(value: SortOption.titleAZ, child: Text('Title A-Z')),
-              PopupMenuItem(value: SortOption.titleZA, child: Text('Title Z-A')),
-              PopupMenuItem(value: SortOption.artistAZ, child: Text('Artist A-Z')),
-              PopupMenuItem(value: SortOption.artistZA, child: Text('Artist Z-A')),
+              PopupMenuItem(
+                value: SortOption.defaultOrder,
+                child: Text('Default'),
+              ),
+              PopupMenuItem(
+                value: SortOption.titleAZ,
+                child: Text('Title A-Z'),
+              ),
+              PopupMenuItem(
+                value: SortOption.titleZA,
+                child: Text('Title Z-A'),
+              ),
+              PopupMenuItem(
+                value: SortOption.artistAZ,
+                child: Text('Artist A-Z'),
+              ),
+              PopupMenuItem(
+                value: SortOption.artistZA,
+                child: Text('Artist Z-A'),
+              ),
             ],
           ),
         ],
@@ -62,7 +80,19 @@ class _FeedPageState extends State<FeedPage> {
       body: ListView.builder(
         padding: const EdgeInsets.only(bottom: 20),
         itemCount: songs.length,
-        itemBuilder: (context, index) => SongCard(song: songs[index]),
+        itemBuilder: (context, index) {
+          final song = songs[index];
+
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => DetailPage(playlist: songs, initialIndex: index)),
+              );
+            },
+            child: SongCard(song: song),
+          );
+        },
       ),
     );
   }

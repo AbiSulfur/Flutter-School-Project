@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_12rpl/models/song_model.dart';
 import 'package:flutter_12rpl/pages/feed_page.dart';
-// import 'profile_page.dart';
-// import 'search_page.dart';
+import 'profile_page.dart';
+import 'search_page.dart';
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
@@ -12,15 +13,25 @@ class MainNavigation extends StatefulWidget {
 
 class _MainNavigationState extends State<MainNavigation> {
   int _currentIndex = 0;
+  List<Song> favoriteSongs = [];
 
-  final List<Widget> _pages = const [
-    FeedPage(),
-    // SearchPage(),
-    // ProfilePage()
-  ];
+  void toggleFavorite(Song song) {
+    setState(() {
+      if (favoriteSongs.contains(song)) {
+        favoriteSongs.remove(song);
+      } else {
+        favoriteSongs.add(song);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _pages = [
+      const FeedPage(),
+      const SearchPage(),
+      ProfilePage(allSongs: sampleSongs),
+    ];
     return Scaffold(
       body: IndexedStack(index: _currentIndex, children: _pages),
       bottomNavigationBar: BottomNavigationBar(
